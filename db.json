@@ -29,30 +29,6 @@
       "name": "todo 5",
       "status": false,
       "sync": true
-    },
-    {
-      "id": "105de4cc-0048-3f5f-2e60-5ea3f836e2ba",
-      "name": "todo 6",
-      "status": false,
-      "sync": true
-    },
-    {
-      "id": "e51bb304-9a78-5e13-b86f-1b6701ef343d",
-      "name": "todo 7",
-      "status": false,
-      "sync": true
-    },
-    {
-      "id": "415786da-1402-8de9-59f4-3331f026e456",
-      "name": "todo 8",
-      "status": false,
-      "sync": true
-    },
-    {
-      "id": "78aa2023-e240-47f5-bb5c-c7cca09bc777",
-      "name": "todo 10",
-      "status": false,
-      "sync": true
     }
   ]
 }
