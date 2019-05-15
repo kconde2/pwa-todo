@@ -1,4 +1,4 @@
 serve:
-	polymer serve
+	npx polymer serve
 api:
-	json-server --watch db.json
+	npx json-server --watch db.json

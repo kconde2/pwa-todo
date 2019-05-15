@@ -10,7 +10,7 @@ export function guidGenerator() {
 }
 
 export async function storeTodoItem(name) {
-    console.log(name);
+
     let todoItem = {
         'id': guidGenerator(),
         'name': name,
@@ -50,7 +50,6 @@ export async function sendLocalData() {
                     body: JSON.stringify(nonSyncedTodo)
                 });
                 const content = await rawResponse.json();
-                console.log("Send Local Data : ", content);
             });
 
             todos.forEach(function (nonSyncedTodo) {
