@@ -1,6 +1,6 @@
 import AppTodoItem from '/js/components/TodoItem/TodoItem.js';
 import checkConnectivity from '/js/services/connection.js';
-import { sendLocalData } from '/js/services/utils.js';
+import { sendLocalData, storeTodoItem, getApiTodos, isOnline } from '/js/services/utils.js';
 import { todoStore } from '/js/services/db.js';
 
 (async function (document) {
@@ -10,27 +10,30 @@ import { todoStore } from '/js/services/db.js';
   const todoList = app.querySelector('[page=todo-list]');
   const addTodoButton = app.querySelector("#addTodoButton");
   const addTodoValue = app.querySelector("#addTodoValue");
+  const store = await todoStore();
+  let todos = undefined;
 
   checkConnectivity();
-  document.addEventListener('connection-changed', ({ detail }) => {
-    window.todoAppIsOnline = detail;
-  });
-
-  const store = await todoStore();
-  const todos = await store.get('todos', 'todos');
+  todos = await store.get('todos', 'todos');
+  // initial data
+  // if (!todos) {
+  //   await store.put('todos', [], 'todos');
+  // }
 
   if (!todos) {
-    await store.put('todos', [], 'todos');
+      todos = await getApiTodos();
+      await store.put('todos', todos, 'todos');
+  } else {
+    todos = await store.get('todos', 'todos');
   }
 
+  // Build todo list
   if (todos) {
     try {
-      const todoItem = todos.map(todo => {
+      todos.map(todo => {
         const todoElement = new AppTodoItem();
-
         todoElement.initTodoItem(todo.name, todo.status);
         todoList.appendChild(todoElement);
-
         return todoElement;
       });
 
@@ -38,24 +41,32 @@ import { todoStore } from '/js/services/db.js';
       console.log(error.toString());
     }
   } else {
-    var textnode = document.createTextNode("No todo item yet");         // Create a text node
+    var textnode = document.createTextNode("No todo item yet");
     todoList.appendChild(textnode);
   }
 
-
-  // Listening to Add Todo Event
+  // Listening to add Todo Event
   addTodoButton.addEventListener('click', async function () {
+    const todo = await storeTodoItem(addTodoValue.value);
 
-    if (window.todoAppIsOnline) {
-      console.log('yes');
-      const todos = await store.get('todos', 'todos');
-
-      if (todos) {
-        sendLocalData(todos);
-      }
-    } else {
-      storeTodoItem(addTodoValue.value);
+    addTodoValue.value = '';
+    if (isOnline() == true) {
+      console.log('est appelé 1');
+      sendLocalData();
     }
+
+    // Add new todo Item to dom
+    const todoElement = new AppTodoItem();
+    todoElement.initTodoItem(todo.name, todo.status);
+    todoList.appendChild(todoElement);
   });
 
+  // Listening connectivity
+  document.addEventListener('connection-changed', async ({ detail }) => {
+    localStorage.setItem('todoAppIsOnline', detail);
+    console.log(detail, navigator.onLine);
+    if (detail == true && navigator.onLine) {
+      sendLocalData();
+    }
+  });
 })(document);

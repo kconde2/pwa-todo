@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "gen": "npx workbox generateSW"
+  },
   "dependencies": {
     "idb": "^4.0.3",
     "lit-element": "^2.1.0"

@@ -1,5 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
-
+import { LitElement, html, css } from "/node_modules/lit-element/lit-element.js";
 export default class AppTodoItem extends LitElement {
 
     constructor() {
@@ -21,6 +20,15 @@ export default class AppTodoItem extends LitElement {
       :host {
         display: block;
       }
+
+      .item {
+        padding: 10px 20px;
+        border: 1px solid #eee;
+      }
+
+      .item.done {
+        text-decoration: line-through;
+      }
     `;
     }
 
@@ -31,7 +39,7 @@ export default class AppTodoItem extends LitElement {
 
     render() {
         return html`
-        <div class="${this.status == true ? 'done' : 'todo'}">${this.name}</div>
+        <div class="item ${this.status == true ? 'done' : 'todo'}">${this.name}</div>
     `;
     }
 }

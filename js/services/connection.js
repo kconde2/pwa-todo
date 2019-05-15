@@ -51,9 +51,13 @@ function checkLatency(timeToCount, offlineTimeout, cb) {
             }, offlineTimeout);
         }
     } else {
-        const sum = arrTimes.reduce((a, b) => a + b);
-        const avg = sum / arrTimes.length;
-        cb(avg);
+        if (arrTimes.length > 0) {
+            const sum = arrTimes.reduce((a, b) => a + b);
+            const avg = sum / arrTimes.length;
+            cb(avg);
+        }else {
+            cb(0);
+        }
     }
 }
 
